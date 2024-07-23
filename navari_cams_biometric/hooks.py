@@ -4,6 +4,23 @@ app_publisher = "Navari Limited"
 app_description = "///\'.\'"
 app_email = "mania@navari.co.ke"
 app_license = "agpl-3.0"
+
+
+fixtures = [
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            [
+                "name",
+                "in",
+                (
+                    "Employee Checkin-custom_input_type",
+                    
+                ),
+            ]
+        ],
+    },
+]
 # required_apps = []
 
 # Includes in <head>
