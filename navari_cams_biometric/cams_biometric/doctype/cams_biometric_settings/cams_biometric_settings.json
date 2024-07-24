@@ -1,0 +1,63 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-07-24 13:06:10.572066",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "auth_token",
+  "bulk_punchlog_section",
+  "start_date",
+  "column_break_jipe",
+  "end_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "auth_token",
+   "fieldtype": "Data",
+   "label": "Auth Token"
+  },
+  {
+   "fieldname": "bulk_punchlog_section",
+   "fieldtype": "Section Break",
+   "label": "Bulk Punchlog"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "column_break_jipe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2024-07-24 13:08:05.909310",
+ "modified_by": "Administrator",
+ "module": "Cams Biometric",
+ "name": "Cams Biometric Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
