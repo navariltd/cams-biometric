@@ -43,17 +43,25 @@ def handle_attendance_log(stgid, rawdata):
     log_time_dt = parser.parse(log_time)
     formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
 
-    # Storing the values in Employee Checking doctype
-    employee_checking = frappe.get_doc({
-        "doctype": "Employee Checkin",
+    # Check if the employee check-in already exists
+    existing_checkin = frappe.db.exists("Employee Checkin", {
         "employee": request_data["RealTime"]["PunchLog"]["UserId"],
         "time": formatted_log_time,
-        "log_type": log_type,
-        "custom_input_type":request_data["RealTime"]["PunchLog"]["InputType"]
+        "log_type": log_type
     })
 
-    employee_checking.insert(ignore_permissions=True)
-    frappe.db.commit()
+    if not existing_checkin:
+        # Storing the values in Employee Checking doctype
+        employee_checking = frappe.get_doc({
+            "doctype": "Employee Checkin",
+            "employee": request_data["RealTime"]["PunchLog"]["UserId"],
+            "time": formatted_log_time,
+            "log_type": log_type,
+            "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"]
+        })
+
+        employee_checking.insert(ignore_permissions=True)
+        frappe.db.commit()
 
     return "done"
 
