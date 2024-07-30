@@ -8,7 +8,6 @@ from flask import Response
 def attendance():
     rawdata = frappe.local.request.get_data(as_text=True)
     stgid = frappe.local.form_dict.get('stgid')
-    print(f"Received data: {rawdata}")  # Print raw data for debugging
 
     if not rawdata:
         return Response(
@@ -47,12 +46,13 @@ def handle_attendance_log(stgid, rawdata):
     log_time = request_data["RealTime"]["PunchLog"]["LogTime"]
     log_time_dt = parser.parse(log_time)
     formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
-
+    default_shift= get_shift(request_data["RealTime"]["PunchLog"]["UserId"])
     # Check if the employee check-in already exists
     existing_checkin = frappe.db.exists("Employee Checkin", {
         "employee": request_data["RealTime"]["PunchLog"]["UserId"],
         "time": formatted_log_time,
-        "log_type": log_type
+        "log_type": log_type,
+        
     })
 
     if not existing_checkin:
@@ -62,7 +62,9 @@ def handle_attendance_log(stgid, rawdata):
             "employee": request_data["RealTime"]["PunchLog"]["UserId"],
             "time": formatted_log_time,
             "log_type": log_type,
-            "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"]
+            "shift": default_shift,
+            "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"],
+            
         })
 
         employee_checking.insert(ignore_permissions=True)
@@ -79,12 +81,12 @@ def handle_punch_logs(stgid, punch_logs):
         log_time = punch_log["LogTime"]
         log_time_dt = parser.parse(log_time)
         formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
-
+        default_shift= get_shift(punch_log["UserID"])
         # Check if the employee check-in already exists
         existing_checkin = frappe.db.exists("Employee Checkin", {
             "employee": punch_log["UserID"],
             "time": formatted_log_time,
-            "log_type": log_type
+            "log_type": log_type,
         })
 
         if not existing_checkin:
@@ -94,7 +96,8 @@ def handle_punch_logs(stgid, punch_logs):
                 "employee": punch_log["UserID"],
                 "time": formatted_log_time,
                 "log_type": log_type,
-                "custom_input_type": punch_log["InputType"]
+                "custom_input_type": punch_log["InputType"],
+                "shift": default_shift
             })
 
             employee_checking.insert(ignore_permissions=True)
@@ -119,3 +122,13 @@ def add_photo():
     
 def load_punch_logs():
     pass
+
+def get_shift(biometric_id):
+    user = frappe.get_list("Employee", filters={"attendance_device_id": biometric_id}, fields=["name", "default_shift"])
+    if user:
+        first_user = user[0]  
+        user_doc=frappe.get_doc("Employee",first_user["name"])
+        return user_doc.default_shift
+    else:
+        return None  
+    
