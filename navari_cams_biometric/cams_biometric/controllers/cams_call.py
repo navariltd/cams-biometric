@@ -69,6 +69,8 @@ def handle_attendance_log(stgid, rawdata):
 
         employee_checking.insert(ignore_permissions=True)
         frappe.db.commit()
+        if default_shift:
+            update_last_sync_time(default_shift, formatted_log_time)
 
     return "done"
 
@@ -102,7 +104,8 @@ def handle_punch_logs(stgid, punch_logs):
 
             employee_checking.insert(ignore_permissions=True)
             frappe.db.commit()
-
+            if default_shift:
+                update_last_sync_time(default_shift, formatted_log_time)
     return "done"
 
 def add_user():
@@ -132,3 +135,9 @@ def get_shift(biometric_id):
     else:
         return None  
     
+def update_last_sync_time(shift, time):
+    shift_doc = frappe.get_doc("Shift", shift)
+    shift_doc.last_sync_of_checkin = time
+    shift_doc.save(ignore_permissions=True)
+    frappe.db.commit()
+    return "done"

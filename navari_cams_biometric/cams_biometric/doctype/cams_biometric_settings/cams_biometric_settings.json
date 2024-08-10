@@ -5,6 +5,8 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "service_tag_id",
+  "column_break_mhih",
   "auth_token",
   "bulk_punchlog_section",
   "start_date",
@@ -23,8 +25,9 @@
    "label": "Bulk Punchlog"
   },
   {
+   "default": "Today",
    "fieldname": "start_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "label": "Start Date"
   },
   {
@@ -32,15 +35,25 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "Today",
    "fieldname": "end_date",
-   "fieldtype": "Date",
+   "fieldtype": "Datetime",
    "label": "End Date"
+  },
+  {
+   "fieldname": "column_break_mhih",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "service_tag_id",
+   "fieldtype": "Data",
+   "label": "Service Tag Id"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-07-24 13:08:05.909310",
+ "modified": "2024-07-31 14:14:10.926371",
  "modified_by": "Administrator",
  "module": "Cams Biometric",
  "name": "Cams Biometric Settings",
