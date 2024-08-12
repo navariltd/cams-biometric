@@ -61,6 +61,8 @@ def handle_attendance_log(stgid, rawdata):
             "doctype": "Employee Checkin",
             "employee": request_data["RealTime"]["PunchLog"]["UserId"],
             "time": formatted_log_time,
+            "custom_constant_time":formatted_log_time,
+
             "log_type": log_type,
             "shift": default_shift,
             "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"],
@@ -97,6 +99,7 @@ def handle_punch_logs(stgid, punch_logs):
                 "doctype": "Employee Checkin",
                 "employee": punch_log["UserID"],
                 "time": formatted_log_time,
+                "custom_constant_time":formatted_log_time,
                 "log_type": log_type,
                 "custom_input_type": punch_log["InputType"],
                 "shift": default_shift
@@ -141,3 +144,8 @@ def update_last_sync_time(shift, time):
     shift_doc.save(ignore_permissions=True)
     frappe.db.commit()
     return "done"
+
+
+#Constant Time is a data field just added for informational purpose only. It is not used in any calculation or logic. It is just a copy of the time field.
+#The time field is the actual time of the punch log.
+#It is important when you want to view different zone but maintain the time of the original zone.
