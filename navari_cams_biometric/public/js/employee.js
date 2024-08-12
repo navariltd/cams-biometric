@@ -76,7 +76,7 @@ frappe.ui.form.on('Employee', {
                 }
             });
             d.show();
-        }).addClass("btn-primary");
+        }).addClass("btn-primary"), __('eBIMS Actions');
     }
 
         if(frm.doc.custom_biometric_registered===1){
