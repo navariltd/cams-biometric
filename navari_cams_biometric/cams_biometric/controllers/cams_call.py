@@ -139,9 +139,7 @@ def get_shift(biometric_id):
         return None  
     
 def update_last_sync_time(shift, time):
-    shift_doc = frappe.get_doc("Shift", shift)
-    shift_doc.last_sync_of_checkin = time
-    shift_doc.save(ignore_permissions=True)
+    frappe.db.set_value("Shift Type", shift, "last_sync_of_checkin", time, update_modified=False)
     frappe.db.commit()
     return "done"
 
