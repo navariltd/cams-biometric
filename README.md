@@ -1,15 +1,15 @@
-# CAMS Biometric Integration with FrappeHR
+# CAMS Biometrics Integration with FrappeHR
 
 ## Introduction
 ![checkin](https://github.com/user-attachments/assets/57857c26-a164-4f28-8c60-e7a4bcb4a67e)
 
-Integrating the [CAMS biometric system](https://camsunit.com/application/biometric-web-api.html) with FrappeHR enables real-time attendance tracking and automated data synchronization. This integration allows you to efficiently capture and manage punch logs directly from your biometric devices, ensuring accurate and up-to-date attendance records.
+Integrating the [CAMS biometrics system](https://camsunit.com/application/biometric-web-api.html) with FrappeHR enables real-time attendance tracking and automated data synchronization. This integration allows you to efficiently capture and manage punch logs directly from your biometric devices, ensuring accurate and up-to-date attendance records.
 
-By setting up this integration, you can streamline your attendance processes, minimize manual data entry, and enhance overall accuracy in tracking employee time. The integration ensures that punch data from CAMS biometric devices is seamlessly transferred to FrappeHR, where it is recorded in real-time, helping you maintain a reliable attendance management system.
+By setting up this integration, you can streamline your attendance processes, minimize manual data entry, and enhance overall accuracy in tracking employee time. The integration ensures that punch data from CAMS biometrics devices is seamlessly transferred to FrappeHR, where it is recorded in real-time, helping you maintain a reliable attendance management system.
 
 ## 1. Setup and Configuration
 
-### 1.1 CAMS Biometric Settings
+### 1.1 CAMS Biometrics Settings
 
 1.  **Service Tag ID and Auth Token:**
     
