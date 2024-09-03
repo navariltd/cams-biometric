@@ -17,6 +17,7 @@ frappe.ui.form.on("Cams Biometric Settings", {
                     {
                         label: 'Start Date',
                         fieldname: 'start_date',
+                        default:frappe.datetime.get_today(),
                         fieldtype: 'Date',
                         reqd: 1
                     },
@@ -24,6 +25,7 @@ frappe.ui.form.on("Cams Biometric Settings", {
                         label: 'End Date',
                         fieldname: 'end_date',
                         fieldtype: 'Date',
+                        default:frappe.datetime.get_today(),
                         reqd: 1
                     }
                 ],
