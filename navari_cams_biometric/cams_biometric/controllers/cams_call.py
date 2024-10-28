@@ -130,6 +130,7 @@ def load_punch_logs():
     pass
 
 def get_shift(biometric_id):
+    frappe.flags.ignore_permissions = True
     user = frappe.get_list("Employee", filters={"attendance_device_id": biometric_id}, fields=["name", "default_shift"])
     if user:
         first_user = user[0]  
