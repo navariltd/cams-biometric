@@ -2,7 +2,7 @@ import json
 import frappe
 from frappe import _
 from dateutil import parser
-from flask import Response 
+from flask import Response
 
 @frappe.whitelist(allow_guest=True)
 def attendance():
@@ -76,6 +76,7 @@ def handle_attendance_log(stgid, rawdata):
 
     return "done"
 
+@frappe.whitelist(allow_guest=True)
 def handle_punch_logs(stgid, punch_logs):
     for punch_log in punch_logs:
         log_type_punch = punch_log["Type"]
@@ -130,14 +131,17 @@ def load_punch_logs():
     pass
 
 def get_shift(biometric_id):
-    frappe.flags.ignore_permissions = True
-    user = frappe.get_list("Employee", filters={"attendance_device_id": biometric_id}, fields=["name", "default_shift"])
+    user = frappe.db.sql("""
+        SELECT name, default_shift 
+        FROM `tabEmployee`
+        WHERE attendance_device_id = %s
+    """, (biometric_id,), as_dict=True)
+    frappe.flags.ignore_permissions = False  # Reset permissions
+
     if user:
-        first_user = user[0]  
-        user_doc=frappe.get_doc("Employee",first_user["name"])
-        return user_doc.default_shift
-    else:
-        return None  
+        return user[0].get("default_shift")
+    return None
+ 
     
 def update_last_sync_time(shift, time):
     frappe.db.set_value("Shift Type", shift, "last_sync_of_checkin", time, update_modified=False)
