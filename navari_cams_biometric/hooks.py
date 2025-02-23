@@ -2,7 +2,7 @@ app_name = "navari_cams_biometric"
 app_title = "Cams Biometrics Integration"
 app_publisher = "Navari Limited"
 app_description = "Cams Biometrics Integration with FrappeHR"
-app_email = "mania@navari.co.ke"
+app_email = "support@navari.co.ke"
 app_license = "GNU Affero General Public License v3.0"
 required_apps = ["frappe/erpnext"]
 
