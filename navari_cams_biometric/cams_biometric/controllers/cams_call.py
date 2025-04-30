@@ -66,6 +66,7 @@ def handle_attendance_log(stgid, rawdata):
             "log_type": log_type,
             "shift": default_shift,
             "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"],
+            "punch_type":log_type_punch,
             
         })
 
