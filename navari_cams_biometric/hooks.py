@@ -18,6 +18,7 @@ fixtures = [
                     "Employee Checkin-custom_input_type",
                     "Employee Checkin-custom_constant_time",
                     "Employee-custom_biometric_registered"
+                    "Employee Checkin-custom_specific_punch_type"
                 ),
             ]
         ],
