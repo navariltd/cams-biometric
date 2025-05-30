@@ -1,14 +1,15 @@
 import json
-from unittest import TestCase
+from frappe.tests.utils import FrappeTestCase
 from unittest.mock import patch, MagicMock
 from navari_cams_biometric.cams_biometric.controllers.cams_call import (
     handle_attendance_log,
     handle_punch_logs,
     attendance,
+    update_last_sync_time,
 )
 
 
-class TestCamsCall(TestCase):
+class TestCamsCall(FrappeTestCase):
 
     @patch("navari_cams_biometric.cams_biometric.controllers.cams_call.frappe")
     @patch("navari_cams_biometric.cams_biometric.controllers.cams_call.parser")
@@ -123,4 +124,18 @@ class TestCamsCall(TestCase):
         self.assertEqual(response.status_code, 200)
         mock_handle_punch_logs.assert_called_once_with("STG001", data_punchlog["PunchLog"]["Log"])
 
+    @patch("navari_cams_biometric.cams_biometric.controllers.cams_call.frappe")
+    def test_update_last_sync_time_calls_db_methods(self, mock_frappe):
+        shift = "Shift A"
+        time = "2024-05-01 08:00:00"
 
+        mock_frappe.db.set_value = MagicMock()
+        mock_frappe.db.commit = MagicMock()
+
+        result = update_last_sync_time(shift, time)
+
+        mock_frappe.db.set_value.assert_called_once_with(
+            "Shift Type", shift, "last_sync_of_checkin", time, update_modified=False
+        )
+        mock_frappe.db.commit.assert_called_once()
+        self.assertEqual(result, "done")
