@@ -1,0 +1,67 @@
+[
+ {
+  "cards": [
+   {
+    "card": "Total check-ins yesterday",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   },
+   {
+    "card": "Total check-outs yesterday",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   },
+   {
+    "card": "Check-ins with shifts",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   },
+   {
+    "card": "Check-ins without shifts",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   },
+   {
+    "card": "Check-outs with shifts",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   },
+   {
+    "card": "Check-outs without shifts",
+    "parent": "Cams Dashboard",
+    "parentfield": "cards",
+    "parenttype": "Dashboard"
+   }
+  ],
+  "chart_options": null,
+  "charts": [
+   {
+    "chart": "Check-ins vs. Check-outs (Pie)",
+    "parent": "Cams Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   },
+   {
+    "chart": "Shift Type Distribution (Pie)",
+    "parent": "Cams Dashboard",
+    "parentfield": "charts",
+    "parenttype": "Dashboard",
+    "width": "Half"
+   }
+  ],
+  "dashboard_name": "Cams Dashboard",
+  "docstatus": 0,
+  "doctype": "Dashboard",
+  "is_default": 0,
+  "is_standard": 1,
+  "modified": "2025-06-11 10:38:22.058509",
+  "module": "Cams Biometric",
+  "name": "Cams Dashboard"
+ }
+]
