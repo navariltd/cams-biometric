@@ -33,7 +33,28 @@ def attendance():
 
 
 def handle_attendance_log(stgid, rawdata):
+    if not rawdata:
+        return
+
     request_data = json.loads(rawdata)
+    device_id = request_data["RealTime"]["PunchLog"]["UserId"]
+
+    employee = frappe.get_all(
+        "Employee",
+        filters={"attendance_device_id": device_id},
+        fields=["name", "attendance_device_id"],
+    )
+
+    employee = frappe.db.get_value(
+        "Employee",
+        filters={"attendance_device_id": device_id},
+    )
+
+    if not employee:
+        frappe.log_error(
+            "Cams Biometric Error" f"No Employee with device UserID {device_id} found."
+        )
+        return
 
     log_type_punch = request_data["RealTime"]["PunchLog"]["Type"]
     log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
@@ -47,7 +68,7 @@ def handle_attendance_log(stgid, rawdata):
     existing_checkin = frappe.db.exists(
         "Employee Checkin",
         {
-            "employee": request_data["RealTime"]["PunchLog"]["UserId"],
+            "employee": employee,
             "time": formatted_log_time,
             "log_type": log_type,
         },
@@ -58,7 +79,7 @@ def handle_attendance_log(stgid, rawdata):
         employee_checking = frappe.get_doc(
             {
                 "doctype": "Employee Checkin",
-                "employee": request_data["RealTime"]["PunchLog"]["UserId"],
+                "employee": employee,
                 "time": formatted_log_time,
                 "custom_constant_time": formatted_log_time,
                 "log_type": log_type,
@@ -87,10 +108,24 @@ def handle_punch_logs(stgid, punch_logs):
         filters={"attendance_device_id": ["in", device_ids]},
         fields=["name", "attendance_device_id"],
     )
+
+    if not employees:
+        frappe.log_error(
+            "Cams Biometric Error" f"No Employee with Attendance Device ID found"
+        )
+        return
+
     emp_map = {emp.attendance_device_id: emp.name for emp in employees}
 
     for punch_log in punch_logs:
-        employee_name = emp_map.get(punch_log.get("UserID"))
+        employee_id = emp_map.get(punch_log.get("UserID"))
+        if not employee_id:
+            frappe.log_error(
+                "Cams Biometric Error"
+                f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry."
+            )
+            continue
+
         log_type_punch = punch_log["Type"]
         log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
 
@@ -103,7 +138,7 @@ def handle_punch_logs(stgid, punch_logs):
         existing_checkin = frappe.db.exists(
             "Employee Checkin",
             {
-                "employee": employee_name,
+                "employee": employee_id,
                 "time": formatted_log_time,
                 "log_type": log_type,
             },
@@ -114,7 +149,7 @@ def handle_punch_logs(stgid, punch_logs):
             employee_checking = frappe.get_doc(
                 {
                     "doctype": "Employee Checkin",
-                    "employee": employee_name,
+                    "employee": employee_id,
                     "time": formatted_log_time,
                     "custom_constant_time": formatted_log_time,
                     "log_type": log_type,
