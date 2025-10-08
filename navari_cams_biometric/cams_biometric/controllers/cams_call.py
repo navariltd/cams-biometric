@@ -9,6 +9,7 @@ from flask import Response
 def attendance():
     rawdata = frappe.local.request.get_data(as_text=True)
     stgid = frappe.local.form_dict.get("stgid")
+    data = []
 
     if not rawdata:
         return Response(
@@ -39,20 +40,14 @@ def handle_attendance_log(stgid, rawdata):
     request_data = json.loads(rawdata)
     device_id = request_data["RealTime"]["PunchLog"]["UserId"]
 
-    employee = frappe.get_all(
-        "Employee",
-        filters={"attendance_device_id": device_id},
-        fields=["name", "attendance_device_id"],
-    )
-
     employee = frappe.db.get_value(
         "Employee",
-        filters={"attendance_device_id": device_id},
+        filters={"attendance_device_id": device_id, "status": "Active"},
     )
 
     if not employee:
         frappe.log_error(
-            "Cams Biometric Error" f"No Employee with device UserID {device_id} found."
+            f"Cams Biometric ErrorNo Employee with device UserID {device_id} found."
         )
         return
 
@@ -105,14 +100,14 @@ def handle_punch_logs(stgid, punch_logs):
     device_ids = [log.get("UserID") for log in punch_logs]
     employees = frappe.get_all(
         "Employee",
-        filters={"attendance_device_id": ["in", device_ids]},
+        filters={"attendance_device_id": ["in", device_ids], "status": "Active"},
         fields=["name", "attendance_device_id"],
     )
 
     if not employees:
-        frappe.log_error(
-            "Cams Biometric Error" f"No Employee with Attendance Device ID found"
-        )
+        title = _("Cams Biometric Error")
+        msg = _("No Employee with Attendance Device ID found")
+        frappe.log_error(title, msg)
         return
 
     emp_map = {emp.attendance_device_id: emp.name for emp in employees}
