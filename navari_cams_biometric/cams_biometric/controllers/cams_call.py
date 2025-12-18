@@ -1,14 +1,21 @@
 import json
+from dateutil import parser
+
 import frappe
 from frappe import _
-from dateutil import parser
 from flask import Response
+
+from ...utils import logger
 
 
 @frappe.whitelist(allow_guest=True)
 def attendance():
     rawdata = frappe.local.request.get_data(as_text=True)
     stgid = frappe.local.form_dict.get("stgid")
+
+    logger.info(f"Raw data received: {rawdata}")
+    logger.info(f"STGID: {stgid}")
+
     data = []
 
     if not rawdata:
@@ -19,6 +26,7 @@ def attendance():
     try:
         data = json.loads(rawdata)
     except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error: {e}")
         return Response(
             json.dumps({"status": "done"}), status=200, mimetype="application/json"
         )
@@ -37,39 +45,50 @@ def handle_attendance_log(stgid, rawdata):
     if not rawdata:
         return
 
-    request_data = json.loads(rawdata)
-    device_id = request_data["RealTime"]["PunchLog"]["UserId"]
+    try:
+        request_data = json.loads(rawdata)
+        punch_log = request_data.get("RealTime", {}).get("PunchLog", {})
 
-    employee = frappe.db.get_value(
-        "Employee",
-        filters={"attendance_device_id": device_id, "status": "Active"},
-    )
 
-    if not employee:
-        frappe.log_error(
-            f"Cams Biometric ErrorNo Employee with device UserID {device_id} found."
+        device_id = punch_log.get("UserId")
+        log_time = punch_log.get("LogTime")
+        log_type_punch = punch_log.get("Type")
+        input_type = punch_log.get("InputType")
+
+        employee = frappe.db.get_value(
+            "Employee",
+            filters={"attendance_device_id": device_id, "status": "Active"},
         )
-        return
 
-    log_type_punch = request_data["RealTime"]["PunchLog"]["Type"]
-    log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
+        if not employee:
+            frappe.log_error(
+                "Missing Employee",
+                f"Cams Biometric Error No Employee with device UserID {device_id} found."
+            )
+            return
 
-    # Convert the datetime format using dateutil.parser
-    log_time = request_data["RealTime"]["PunchLog"]["LogTime"]
-    log_time_dt = parser.parse(log_time)
-    formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
-    default_shift = get_shift(request_data["RealTime"]["PunchLog"]["UserId"])
-    # Check if the employee check-in already exists
-    existing_checkin = frappe.db.exists(
-        "Employee Checkin",
-        {
-            "employee": employee,
-            "time": formatted_log_time,
-            "log_type": log_type,
-        },
-    )
+        log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
 
-    if not existing_checkin:
+        # Convert the datetime format using dateutil.parser
+        log_time_dt = parser.parse(log_time)
+        formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
+
+        default_shift = get_shift(device_id)
+        
+        # Check if the employee check-in already exists
+        existing_checkin = frappe.db.exists(
+            "Employee Checkin",
+            {
+                "employee": employee,
+                "time": formatted_log_time,
+                "log_type": log_type,
+            },
+        )
+
+        if existing_checkin:
+            logger.warning(f"Duplicate check-in detected: {existing_checkin}")
+            return
+
         # Storing the values in Employee Checking doctype
         employee_checking = frappe.get_doc(
             {
@@ -79,17 +98,28 @@ def handle_attendance_log(stgid, rawdata):
                 "custom_constant_time": formatted_log_time,
                 "log_type": log_type,
                 "shift": default_shift,
-                "custom_input_type": request_data["RealTime"]["PunchLog"]["InputType"],
+                "custom_input_type": input_type,
                 "punch_type": log_type_punch,
             }
         )
 
         employee_checking.insert(ignore_permissions=True)
         frappe.db.commit()
+
+        logger.info(f"Successfully created check-in: {employee_checking.name}")
+
         if default_shift:
             update_last_sync_time(default_shift, formatted_log_time)
 
-    return "done"
+    except Exception as e:
+        logger.error(f"Error in handle_attendance_log: {e}", exc_info=True)
+        frappe.log_error(
+            "Attendance Log Error",
+            f"Error processing attendance log: {str(e)}\nData: {rawdata}"
+        )
+
+    finally:
+        return "done"
 
 
 @frappe.whitelist(allow_guest=True)
@@ -107,6 +137,7 @@ def handle_punch_logs(stgid, punch_logs):
     if not employees:
         title = _("Cams Biometric Error")
         msg = _("No Employee with Attendance Device ID found")
+        logger.error(msg)
         frappe.log_error(title, msg)
         return
 
@@ -115,31 +146,36 @@ def handle_punch_logs(stgid, punch_logs):
     for punch_log in punch_logs:
         employee_id = emp_map.get(punch_log.get("UserID"))
         if not employee_id:
+            logger.warning(f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry.")
             frappe.log_error(
                 "Cams Biometric Error"
                 f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry."
             )
             continue
+        
+        try:
+            log_type_punch = punch_log["Type"]
+            log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
 
-        log_type_punch = punch_log["Type"]
-        log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
+            # Convert the datetime format using dateutil.parser
+            log_time = punch_log["LogTime"]
+            log_time_dt = parser.parse(log_time)
+            formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
+            default_shift = get_shift(punch_log["UserID"])
+            # Check if the employee check-in already exists
+            existing_checkin = frappe.db.exists(
+                "Employee Checkin",
+                {
+                    "employee": employee_id,
+                    "time": formatted_log_time,
+                    "log_type": log_type,
+                },
+            )
 
-        # Convert the datetime format using dateutil.parser
-        log_time = punch_log["LogTime"]
-        log_time_dt = parser.parse(log_time)
-        formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
-        default_shift = get_shift(punch_log["UserID"])
-        # Check if the employee check-in already exists
-        existing_checkin = frappe.db.exists(
-            "Employee Checkin",
-            {
-                "employee": employee_id,
-                "time": formatted_log_time,
-                "log_type": log_type,
-            },
-        )
+            if existing_checkin:
+                logger.warning(f"Duplicate check-in: {existing_checkin}")
+                continue
 
-        if not existing_checkin:
             # Storing the values in Employee Checkin doctype
             employee_checking = frappe.get_doc(
                 {
@@ -148,7 +184,7 @@ def handle_punch_logs(stgid, punch_logs):
                     "time": formatted_log_time,
                     "custom_constant_time": formatted_log_time,
                     "log_type": log_type,
-                    "custom_input_type": punch_log["InputType"],
+                    "custom_input_type": punch_log.get("InputType"),
                     "shift": default_shift,
                 }
             )
@@ -157,6 +193,11 @@ def handle_punch_logs(stgid, punch_logs):
             frappe.db.commit()
             if default_shift:
                 update_last_sync_time(default_shift, formatted_log_time)
+
+        except Exception as e:
+            logger.error(f"Error processing punch log: {str(e)}", exc_info=True)
+            continue
+
     return "done"
 
 
