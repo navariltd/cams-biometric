@@ -18,7 +18,7 @@ fixtures = [
                     "Employee Checkin-custom_input_type",
                     "Employee Checkin-custom_constant_time",
                     "Employee-custom_biometric_registered"
-                    "Employee Checkin-custom_specific_punch_type"
+                    "Employee Checkin-custom_specific_punch_type",
                 ),
             ]
         ],
@@ -48,7 +48,7 @@ fixtures = [
 # page_js = {"page" : "public/js/file.js"}
 
 # include js in doctype views
-doctype_js = {"Employee" : "public/js/employee.js"}
+doctype_js = {"Employee": "public/js/employee.js"}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
@@ -246,4 +246,3 @@ doctype_js = {"Employee" : "public/js/employee.js"}
 # default_log_clearing_doctypes = {
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
-
