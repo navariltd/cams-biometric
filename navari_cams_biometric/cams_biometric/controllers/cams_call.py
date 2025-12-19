@@ -49,7 +49,6 @@ def handle_attendance_log(stgid, rawdata):
         request_data = json.loads(rawdata)
         punch_log = request_data.get("RealTime", {}).get("PunchLog", {})
 
-
         device_id = punch_log.get("UserId")
         log_time = punch_log.get("LogTime")
         log_type_punch = punch_log.get("Type")
@@ -63,7 +62,7 @@ def handle_attendance_log(stgid, rawdata):
         if not employee:
             frappe.log_error(
                 "Missing Employee",
-                f"Cams Biometric Error No Employee with device UserID {device_id} found."
+                f"Cams Biometric Error No Employee with device UserID {device_id} found.",
             )
             return
 
@@ -74,7 +73,7 @@ def handle_attendance_log(stgid, rawdata):
         formatted_log_time = log_time_dt.strftime("%Y-%m-%d %H:%M:%S")
 
         default_shift = get_shift(device_id)
-        
+
         # Check if the employee check-in already exists
         existing_checkin = frappe.db.exists(
             "Employee Checkin",
@@ -115,7 +114,7 @@ def handle_attendance_log(stgid, rawdata):
         logger.error(f"Error in handle_attendance_log: {e}", exc_info=True)
         frappe.log_error(
             "Attendance Log Error",
-            f"Error processing attendance log: {str(e)}\nData: {rawdata}"
+            f"Error processing attendance log: {str(e)}\nData: {rawdata}",
         )
 
     finally:
@@ -146,13 +145,15 @@ def handle_punch_logs(stgid, punch_logs):
     for punch_log in punch_logs:
         employee_id = emp_map.get(punch_log.get("UserID"))
         if not employee_id:
-            logger.warning(f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry.")
+            logger.warning(
+                f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry."
+            )
             frappe.log_error(
                 "Cams Biometric Error"
                 f"Unknown device UserID {punch_log.get('UserID')} in punch log; skipping entry."
             )
             continue
-        
+
         try:
             log_type_punch = punch_log["Type"]
             log_type = "OUT" if log_type_punch == "CheckOut" else "IN"
@@ -202,21 +203,21 @@ def handle_punch_logs(stgid, punch_logs):
 
 
 def add_user():
-    first_name = frappe.form_dict.get("first_name")
-    last_name = frappe.form_dict.get("last_name")
-    user_id = frappe.form_dict.get("user_id")
-    user_type = frappe.form_dict.get("user_type")
+    _first_name = frappe.form_dict.get("first_name")
+    _last_name = frappe.form_dict.get("last_name")
+    _user_id = frappe.form_dict.get("user_id")
+    _user_type = frappe.form_dict.get("user_type")
 
 
 def delete_user():
-    user_id = frappe.form_dict.get("user_id")
-    user_type = frappe.form_dict.get("user_type")
+    _user_id = frappe.form_dict.get("user_id")
+    _user_type = frappe.form_dict.get("user_type")
 
 
 def add_photo():
-    user_id = frappe.form_dict.get("user_id")
-    user_type = frappe.form_dict.get("user_type")
-    photo = frappe.form_dict.get("photo")
+    _user_id = frappe.form_dict.get("user_id")
+    _user_type = frappe.form_dict.get("user_type")
+    _photo = frappe.form_dict.get("photo")
 
 
 def load_punch_logs():

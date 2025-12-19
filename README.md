@@ -35,7 +35,7 @@ By setting up this integration, you can streamline your attendance processes, mi
     Log into your [cams unit](https://camsunit.com/#) account
     -   Access the CAMS unit’s API settings.
     -   Paste the copied API URL into the Callback Url field.
-    ![cam sunit](https://github.com/user-attachments/assets/a34b2f24-e3fd-4bf8-a710-4bc5db522630)
+    ![cams unit](https://github.com/user-attachments/assets/a34b2f24-e3fd-4bf8-a710-4bc5db522630)
 
 3.  **Punching Data:**
     -   Once the callback API is set up, you can use the biometric device to record employee punches.
@@ -77,7 +77,7 @@ By setting up this integration, you can streamline your attendance processes, mi
 
 2. [Install ERPNext](https://github.com/frappe/erpnext#installation)
 
-3. [Intsall FrappeHr](https://github.com/frappe/hrms#installation)
+3. [Install FrappeHr](https://github.com/frappe/hrms#installation)
 
     
 
