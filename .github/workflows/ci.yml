@@ -5,7 +5,11 @@ on:
   push:
     branches:
       - develop
+      - 'version-*'
   pull_request:
+    branches:
+      - develop
+      - 'version-*'
 
 concurrency:
   group: develop-navari_cams_biometric-${{ github.event.number }}
