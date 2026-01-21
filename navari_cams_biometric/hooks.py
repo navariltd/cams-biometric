@@ -23,6 +23,33 @@ fixtures = [
             ]
         ],
     },
+    {"doctype": "Dashboard", "filters": [["name", "=", "Cams Dashboard"]]},
+
+    # Export only your relevant charts
+    {
+        "doctype": "Dashboard Chart",
+        "filters": [
+            ["name", "in", [
+                "Check-ins vs. Check-outs (Pie)",
+                "Shift Type Distribution (Pie)"
+            ]]
+        ]
+    },
+
+    # Export only your relevant number cards
+    {
+        "doctype": "Number Card",
+        "filters": [
+            ["name", "in", [
+                "Total check-ins yesterday",
+                "Total check-outs yesterday",
+                "Check-ins with shifts",
+                "Check-ins without shifts",
+                "Check-outs with shifts",
+                "Check-outs without shifts"
+            ]]
+        ]
+    }
 ]
 # required_apps = []
 
