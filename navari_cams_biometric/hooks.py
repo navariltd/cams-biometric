@@ -19,7 +19,6 @@ add_to_apps_screen = [
 ]
 
 
-
 fixtures = [
     {
         "doctype": "Custom Field",
