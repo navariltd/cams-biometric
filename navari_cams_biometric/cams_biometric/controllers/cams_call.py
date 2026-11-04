@@ -3,7 +3,7 @@ from dateutil import parser
 
 import frappe
 from frappe import _
-from flask import Response
+from werkzeug.wrappers import Response
 
 from ...utils import logger
 
@@ -117,8 +117,7 @@ def handle_attendance_log(stgid, rawdata):
             f"Error processing attendance log: {str(e)}\nData: {rawdata}",
         )
 
-    finally:
-        return "done"
+    return "done"
 
 
 @frappe.whitelist(allow_guest=True)
