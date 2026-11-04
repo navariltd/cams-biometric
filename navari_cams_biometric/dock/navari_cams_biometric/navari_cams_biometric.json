@@ -1,0 +1,26 @@
+{
+  "doctype": "Dock",
+  "name": "navari_cams_biometric",
+  "app": "navari_cams_biometric",
+  "standard": 1,
+  "user": "",
+  "docstatus": 0,
+  "items": [
+    {
+      "title": "Cams Biometric",
+      "icon": "fingerprint-pattern",
+      "link_type": "Sidebar",
+      "link_to": "Cams Biometric",
+      "hidden": 0,
+      "added": 0
+    },
+    {
+      "title": "CAMS Administration",
+      "icon": "shield-check",
+      "link_type": "Workspace",
+      "link_to": "CAMS Biometric Admin",
+      "hidden": 0,
+      "added": 1
+    }
+  ]
+}

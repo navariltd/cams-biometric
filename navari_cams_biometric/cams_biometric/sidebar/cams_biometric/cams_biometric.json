@@ -1,0 +1,79 @@
+{
+  "doctype": "Sidebar",
+  "name": "Cams Biometric",
+  "title": "Cams Biometric",
+  "module": "Cams Biometric",
+  "app": "navari_cams_biometric",
+  "header_icon": "fingerprint-pattern",
+  "standard": 1,
+  "docstatus": 0,
+  "items": [
+    {
+      "type": "Link",
+      "label": "Overview",
+      "link_type": "Workspace",
+      "link_to": "CAMS Biometric",
+      "child": 0,
+      "hidden": 0,
+      "added": 0,
+      "open_in_new_tab": 0,
+      "is_default_module": 0,
+      "icon": "house"
+    },
+    {
+      "type": "Section Break",
+      "label": "Daily Operations",
+      "icon": "calendar-days",
+      "child": 0,
+      "indent": 1,
+      "collapsible": 1,
+      "keep_closed": 0,
+      "hidden": 0,
+      "added": 0
+    },
+    {
+      "type": "Link",
+      "label": "Employees",
+      "link_type": "DocType",
+      "link_to": "Employee",
+      "child": 1,
+      "hidden": 0,
+      "added": 0,
+      "open_in_new_tab": 0,
+      "is_default_module": 0
+    },
+    {
+      "type": "Link",
+      "label": "Employee Checkin",
+      "link_type": "DocType",
+      "link_to": "Employee Checkin",
+      "child": 1,
+      "hidden": 0,
+      "added": 0,
+      "open_in_new_tab": 0,
+      "is_default_module": 0
+    },
+    {
+      "type": "Link",
+      "label": "Attendance",
+      "link_type": "DocType",
+      "link_to": "Attendance",
+      "child": 1,
+      "hidden": 0,
+      "added": 0,
+      "open_in_new_tab": 0,
+      "is_default_module": 0
+    },
+    {
+      "type": "Link",
+      "label": "Shift Type",
+      "link_type": "DocType",
+      "link_to": "Shift Type",
+      "child": 1,
+      "hidden": 0,
+      "added": 0,
+      "open_in_new_tab": 0,
+      "is_default_module": 0
+    }
+  ]
+}

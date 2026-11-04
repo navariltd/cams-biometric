@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="CAMS Biometric">
+  <rect width="64" height="64" rx="14" fill="#17324d"/>
+  <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+    <path d="M20 28c0-7 5-12 12-12s12 5 12 12"/>
+    <path d="M15 30c0-10 7-19 17-19s17 9 17 19"/>
+    <path d="M25 31c0-4 3-7 7-7s7 3 7 7v8"/>
+    <path d="M20 35v5c0 6-2 9-4 12"/>
+    <path d="M32 30v12c0 6-1 10-4 14"/>
+    <path d="M44 36v6c0 5-1 8-3 11"/>
+    <path d="M37 46c0 4-1 7-2 10"/>
+  </g>
+</svg>
