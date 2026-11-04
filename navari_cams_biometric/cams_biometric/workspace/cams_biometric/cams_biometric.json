@@ -1,0 +1,56 @@
+{
+ "doctype": "Workspace",
+ "name": "CAMS Biometric",
+ "label": "CAMS Biometric",
+ "title": "CAMS Biometric",
+ "module": "Cams Biometric",
+ "type": "Workspace",
+ "standard": 1,
+ "public": 1,
+ "is_hidden": 0,
+ "docstatus": 0,
+ "for_user": "",
+ "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Daily Operations</span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employees\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Checkin\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Attendance\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Shift Type\",\"col\":3}}]",
+ "roles": [
+  {
+   "role": "HR User"
+  },
+  {
+   "role": "HR Manager"
+  },
+  {
+   "role": "System Manager"
+  }
+ ],
+ "shortcuts": [
+  {
+   "label": "Employees",
+   "type": "DocType",
+   "link_to": "Employee",
+   "doc_view": "List"
+  },
+  {
+   "label": "Employee Checkin",
+   "type": "DocType",
+   "link_to": "Employee Checkin",
+   "doc_view": "List"
+  },
+  {
+   "label": "Attendance",
+   "type": "DocType",
+   "link_to": "Attendance",
+   "doc_view": "List"
+  },
+  {
+   "label": "Shift Type",
+   "type": "DocType",
+   "link_to": "Shift Type",
+   "doc_view": "List"
+  }
+ ],
+ "charts": [],
+ "custom_blocks": [],
+ "links": [],
+ "number_cards": [],
+ "quick_lists": []
+}

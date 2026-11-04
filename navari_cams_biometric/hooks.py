@@ -6,6 +6,19 @@ app_email = "support@navari.co.ke"
 app_license = "GNU Affero General Public License v3.0"
 required_apps = ["frappe/erpnext"]
 
+# Frappe v16.50-style native app navigation.
+add_to_apps_screen = [
+    {
+        "name": "navari_cams_biometric",
+        "logo": "/assets/navari_cams_biometric/images/cams_biometric.svg",
+        "title": "CAMS Biometric",
+        "route": "/desk/cams-biometric",
+        "has_permission": "navari_cams_biometric.utils.navigation.has_cams_access",
+        "sequence_id": 50,
+    }
+]
+
+
 
 fixtures = [
     {

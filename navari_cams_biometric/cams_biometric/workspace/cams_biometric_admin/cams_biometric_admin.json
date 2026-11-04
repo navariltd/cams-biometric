@@ -1,0 +1,38 @@
+{
+ "doctype": "Workspace",
+ "name": "CAMS Biometric Admin",
+ "label": "CAMS Biometric Admin",
+ "title": "CAMS Biometric Admin",
+ "module": "Cams Biometric",
+ "type": "Workspace",
+ "standard": 1,
+ "public": 1,
+ "is_hidden": 0,
+ "docstatus": 0,
+ "for_user": "",
+ "content": "[{\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Administration</span>\",\"col\":12}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Cams Biometric Settings\",\"col\":3}},{\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Error Log\",\"col\":3}}]",
+ "roles": [
+  {
+   "role": "System Manager"
+  }
+ ],
+ "shortcuts": [
+  {
+   "label": "Cams Biometric Settings",
+   "type": "DocType",
+   "link_to": "Cams Biometric Settings",
+   "doc_view": "List"
+  },
+  {
+   "label": "Error Log",
+   "type": "DocType",
+   "link_to": "Error Log",
+   "doc_view": "List"
+  }
+ ],
+ "charts": [],
+ "custom_blocks": [],
+ "links": [],
+ "number_cards": [],
+ "quick_lists": []
+}
